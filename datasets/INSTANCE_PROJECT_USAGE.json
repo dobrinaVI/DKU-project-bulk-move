@@ -86,8 +86,17 @@
     }
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"projectKey","type":"string"},
+      {"name":"projectName","type":"string"},
+      {"name":"pythonCodeEnv","type":"string"},
+      {"name":"webappPythonCodeEnvs","type":"string"},
+      {"name":"snowflakeConnections","type":"string"},
+      {"name":"openaiConnections","type":"string"},
+      {"name":"openaiLLMIds","type":"string"},
+      {"name":"errors","type":"string"}
+    ],
+    "userModified": false
   },
   "typeSystemVersion": "V2",
   "dkuProperties": [],
