@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Bulk Move</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="header">
+        <div class="title">Project Bulk Move</div>
+        <div class="subtitle">Export from source DSS → import into target DSS (with connection remapping)</div>
+      </header>
+
+      <div class="grid">
+        <section class="card">
+          <div class="cardTitle">Source instance</div>
+          <label class="label">Host</label>
+          <input id="srcHost" class="input" placeholder="https://source-dss:11200" />
+          <label class="label">API key</label>
+          <input id="srcKey" class="input" type="password" placeholder="dku..." />
+        </section>
+
+        <section class="card">
+          <div class="cardTitle">Target instance</div>
+          <label class="label">Host</label>
+          <input id="tgtHost" class="input" placeholder="https://target-dss:11200" />
+          <label class="label">API key</label>
+          <input id="tgtKey" class="input" type="password" placeholder="dku..." />
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="cardTitle">Projects to move</div>
+        <div class="hint">One project key per line. Example: <span class="mono">MYPROJECT</span></div>
+        <textarea id="projects" class="textarea" rows="6" placeholder="PROJECT1&#10;PROJECT2"></textarea>
+      </section>
+
+      <section class="card">
+        <div class="cardTitle">Connection remapping</div>
+        <div class="hint">Map connection names used in the source project to connection names that already exist on the target instance.</div>
+
+        <div class="mappingHeader">
+          <div>Source connection</div>
+          <div>Target connection</div>
+          <div></div>
+        </div>
+
+        <div id="mappings"></div>
+
+        <div class="row">
+          <button id="addMapping" class="btn btnSecondary" type="button">Add mapping</button>
+          <div class="spacer"></div>
+          <button id="start" class="btn" type="button">Start</button>
+        </div>
+
+        <div class="hint mt8">Suggested defaults: add a Snowflake mapping and an OpenAI (LLM Mesh) mapping.</div>
+      </section>
+
+      <section class="card">
+        <div class="cardTitle">Status</div>
+        <div id="statusLine" class="status">Idle</div>
+        <pre id="statusJson" class="pre"></pre>
+      </section>
+    </div>
+  </body>
+</html>
+
