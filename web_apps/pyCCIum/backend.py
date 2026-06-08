@@ -85,6 +85,12 @@ def _run_job(job_id: str, payload: Dict[str, Any]) -> None:
         _set_job(job_id, {"status": "error", "finishedAtMs": _now_ms(), "error": repr(e)})
 
 
+
+
+@app.route("/__ping", methods=["GET"])
+def __ping() -> str:
+    return "pong"
+
 @app.route("/start", methods=["POST"])
 def start() -> str:
     payload = request.get_json(force=True, silent=False)  # type: ignore[no-untyped-call]
