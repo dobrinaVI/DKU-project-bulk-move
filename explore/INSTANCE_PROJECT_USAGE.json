@@ -146,8 +146,8 @@
           "params": {
             "type": "Text",
             "ok": true,
-            "nok": false,
-            "empty": false
+            "nok": true,
+            "empty": true
           }
         }
       },
