@@ -12,6 +12,7 @@ class ProjectUsageRow:
     project_name: str
     python_code_env: str
     webapp_python_code_envs: Tuple[str, ...]
+    agent_tool_code_envs: Tuple[str, ...]
     snowflake_connections: Tuple[str, ...]
     openai_connections: Tuple[str, ...]
     openai_llm_ids: Tuple[str, ...]
@@ -23,6 +24,7 @@ class ProjectUsageRow:
             "projectName": self.project_name,
             "pythonCodeEnv": self.python_code_env,
             "webappPythonCodeEnvs": ", ".join(self.webapp_python_code_envs),
+            "agentToolCodeEnvs": ", ".join(self.agent_tool_code_envs),
             "snowflakeConnections": ", ".join(self.snowflake_connections),
             "openaiConnections": ", ".join(self.openai_connections),
             "openaiLLMIds": ", ".join(self.openai_llm_ids),
@@ -72,6 +74,24 @@ def _parse_llm_id_for_openai(llm_id: str) -> Tuple[Optional[str], Optional[str]]
         return (provider, parts[1])
     return (provider, None)
 
+def _deep_collect_string_values_for_keys(
+    obj: Any, keys_lower: Set[str]
+) -> List[str]:
+    found: List[str] = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            try:
+                k_lower = str(k).lower()
+            except Exception:
+                k_lower = ""
+            if k_lower in keys_lower and isinstance(v, str) and v.strip():
+                found.append(v.strip())
+            found.extend(_deep_collect_string_values_for_keys(v, keys_lower))
+    elif isinstance(obj, list):
+        for v in obj:
+            found.extend(_deep_collect_string_values_for_keys(v, keys_lower))
+    return found
+
 
 def collect_instance_project_usage(
     client: dataikuapi.DSSClient,
@@ -110,6 +130,7 @@ def collect_instance_project_usage(
         openai_connections: Set[str] = set()
         openai_llm_ids: Set[str] = set()
         webapp_envs: Set[str] = set()
+        agent_tool_envs: Set[str] = set()
         python_env = "UNKNOWN"
 
         try:
@@ -145,6 +166,27 @@ def collect_instance_project_usage(
                 errors.append(f"webapps: {e!r}")
 
             try:
+                # Agent tool code envs are not part of project settings; they live on the tools themselves.
+                # We attempt a best-effort extraction by looking for common key names in the tool settings.
+                env_keys = {
+                    "codeenv",
+                    "codeenvname",
+                    "pythoncodeenv",
+                    "pythonenv",
+                    "envname",
+                }
+                for tool in project.list_agent_tools(as_type="objects", include_shared=True):
+                    try:
+                        tool_settings = tool.get_settings().get_raw()
+                        agent_tool_envs.update(
+                            _deep_collect_string_values_for_keys(tool_settings, env_keys)
+                        )
+                    except Exception:
+                        continue
+            except Exception as e:
+                errors.append(f"agent tools: {e!r}")
+
+            try:
                 seen_llm_ids: Set[str] = set()
                 for purpose in include_llm_purposes:
                     try:
@@ -175,6 +217,7 @@ def collect_instance_project_usage(
                 project_name=project_name,
                 python_code_env=python_env,
                 webapp_python_code_envs=_as_sorted_tuple(webapp_envs),
+                agent_tool_code_envs=_as_sorted_tuple(agent_tool_envs),
                 snowflake_connections=_as_sorted_tuple(snowflake_connections),
                 openai_connections=_as_sorted_tuple(openai_connections),
                 openai_llm_ids=_as_sorted_tuple(openai_llm_ids),
@@ -183,4 +226,3 @@ def collect_instance_project_usage(
         )
 
     return rows
-
