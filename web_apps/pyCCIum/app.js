@@ -115,6 +115,69 @@ function setStatus(line, obj) {
   document.getElementById("statusJson").textContent = obj
     ? JSON.stringify(obj, null, 2)
     : "";
+  renderResults(obj);
+}
+
+function pickProjectError(p) {
+  if (!p) return "";
+  if (p.error) return String(p.error);
+  const ir = p.importResult;
+  if (!ir || !Array.isArray(ir.messages)) return "";
+  const msgs = ir.messages
+    .filter((m) => m && (m.isFatal || m.severity === "ERROR"))
+    .map((m) => m.message || m.title || "")
+    .filter(Boolean);
+  if (msgs.length) return msgs.slice(0, 3).join(" | ");
+  return "";
+}
+
+function renderResults(st) {
+  const summary = document.getElementById("resultSummary");
+  const wrap = document.getElementById("resultsTableWrap");
+
+  summary.textContent = "";
+  wrap.style.display = "none";
+  wrap.innerHTML = "";
+
+  if (!st || !st.result || !st.result.projects) return;
+
+  const projects = st.result.projects || [];
+  const ok = projects.filter((p) => p && p.success).length;
+  const ko = projects.length - ok;
+  summary.textContent = `Projects: ${projects.length} • Success: ${ok} • Failed: ${ko}`;
+
+  const table = elt("table", { class: "table" }, []);
+  const thead = elt("thead", null, []);
+  const headRow = elt("tr", null, [
+    elt("th", null, ["Source"]),
+    elt("th", null, ["Target"]),
+    elt("th", null, ["Status"]),
+    elt("th", null, ["Details"]),
+  ]);
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = elt("tbody", null, []);
+  projects.forEach((p) => {
+    const status = p && p.success ? "OK" : "ERROR";
+    const pill = elt(
+      "span",
+      { class: `pill ${status === "OK" ? "pillOk" : "pillErr"}` },
+      [status]
+    );
+    const details = pickProjectError(p);
+    const row = elt("tr", null, [
+      elt("td", null, [String((p && p.sourceProjectKey) || "")]),
+      elt("td", null, [String((p && p.targetProjectKey) || "")]),
+      elt("td", null, [pill]),
+      elt("td", null, [details || "—"]),
+    ]);
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+
+  wrap.appendChild(table);
+  wrap.style.display = "block";
 }
 
 async function poll(jobId) {

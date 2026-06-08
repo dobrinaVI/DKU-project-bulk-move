@@ -148,6 +148,57 @@ body {
   font-size: 12px;
 }
 
+.tableWrap {
+  margin: 10px 0 12px;
+  overflow: auto;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th,
+.table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.table th {
+  text-align: left;
+  font-weight: 700;
+  background: #fafafa;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 11px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.pillOk {
+  border-color: #bfe3c7;
+  background: #eaf7ee;
+  color: #1f6f3b;
+}
+
+.pillErr {
+  border-color: #f2b8b5;
+  background: #fdecec;
+  color: #a61b1b;
+}
+
 .mt8 {
   margin-top: 8px;
 }
@@ -157,4 +208,3 @@ body {
     grid-template-columns: 1fr;
   }
 }
-
