@@ -141,6 +141,7 @@ def migrate_projects(
                 connection_remap=connection_remap,
                 codeenv_remap=codeenv_remap,
             )
+            item["importSettings"] = import_settings
             import_result = import_project_from_zip(
                 tgt_client, zip_path, import_settings=import_settings
             )
