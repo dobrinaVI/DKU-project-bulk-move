@@ -171,8 +171,11 @@ def collect_instance_project_usage(
                 env_keys = {
                     "codeenv",
                     "codeenvname",
+                    "codeenvid",
                     "pythoncodeenv",
+                    "pythoncodeenvname",
                     "pythonenv",
+                    "pythonenvname",
                     "envname",
                 }
                 for tool in project.list_agent_tools(as_type="objects", include_shared=True):
@@ -181,6 +184,13 @@ def collect_instance_project_usage(
                         agent_tool_envs.update(
                             _deep_collect_string_values_for_keys(tool_settings, env_keys)
                         )
+                        try:
+                            tool_descriptor = tool.get_descriptor()
+                            agent_tool_envs.update(
+                                _deep_collect_string_values_for_keys(tool_descriptor, env_keys)
+                            )
+                        except Exception:
+                            pass
                     except Exception:
                         continue
             except Exception as e:

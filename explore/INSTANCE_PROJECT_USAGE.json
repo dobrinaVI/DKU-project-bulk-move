@@ -22,6 +22,10 @@
           "d": true
         },
         {
+          "name": "agentToolCodeEnvs",
+          "d": true
+        },
+        {
           "name": "snowflakeConnections",
           "d": true
         },
@@ -45,6 +49,7 @@
       "projectName": 246,
       "pythonCodeEnv": 162,
       "webappPythonCodeEnvs": 165,
+      "agentToolCodeEnvs": 190,
       "snowflakeConnections": 165,
       "openaiConnections": 169,
       "openaiLLMIds": 300,
