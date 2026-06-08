@@ -6,9 +6,12 @@ import time
 import uuid
 from typing import Any, Dict
 
-from flask import request
+from flask import Flask, request
 
-from dataiku.customwebapp import app
+try:
+    from dataiku.customwebapp import app  # type: ignore
+except Exception:
+    app = Flask(__name__)
 
 from dku_project_bulk_move.migrator import InstanceCredentials, migrate_projects
 
@@ -94,4 +97,3 @@ def start() -> str:
 def status() -> str:
     job_id = request.args.get("jobId", "")
     return json.dumps(_get_job(job_id))
-
