@@ -1,6 +1,6 @@
 {
   "type": "Filesystem",
-  "managed": false,
+  "managed": true,
   "featureGroup": false,
   "formatType": "csv",
   "checklists": {
@@ -71,7 +71,7 @@
   "tags": [],
   "params": {
     "connection": "filesystem_managed",
-    "path": "INSTANCE_PROJECT_USAGE",
+    "path": "${projectKey}/INSTANCE_PROJECT_USAGE",
     "notReadyIfEmpty": false,
     "filesSelectionRules": {
       "mode": "ALL",

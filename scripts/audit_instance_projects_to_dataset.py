@@ -31,24 +31,17 @@ def _ensure_output_dataset(project_key: str, dataset_name: str) -> None:
     project = client.get_project(project_key)
 
     try:
-        project.get_dataset(dataset_name).get_settings()
-        return
-    except Exception:
-        pass
+        ds_handle = project.get_dataset(dataset_name)
+        ds_raw = ds_handle.get_settings().get_raw()
+    except Exception as e:
+        raise Exception(
+            f"Output dataset '{dataset_name}' not found (or not accessible). Create it first, or pull it from Git."
+        ) from e
 
-    # Prefer a managed filesystem dataset (standard in most DSS setups).
-    try:
-        project.create_dataset(
-            dataset_name,
-            type="Filesystem",
-            params={"connection": "filesystem_managed", "path": dataset_name},
-            formatType="csv",
-            formatParams={"separator": ",", "style": "excel"},
+    if str(ds_raw.get("type")) != "Filesystem" or not bool(ds_raw.get("managed")):
+        raise Exception(
+            f"Output dataset '{dataset_name}' must be a managed Filesystem dataset. Current: type={ds_raw.get('type')}, managed={ds_raw.get('managed')}"
         )
-        return
-    except Exception:
-        # Fallback: attempt inline dataset (small inventories)
-        project.create_dataset(dataset_name, type="Inline", params={})
 
 
 def run(

@@ -23,6 +23,7 @@ If you want a quick table of what projects use **Snowflake datasets**, **OpenAI-
 
 - Script: `scripts/audit_instance_projects_to_dataset.py`
 - Output dataset (default): `INSTANCE_PROJECT_USAGE`
+- `INSTANCE_PROJECT_USAGE` should be a **managed** dataset (see `datasets/INSTANCE_PROJECT_USAGE.json`) so it can be overwritten safely.
 
 ## Usage (in DSS)
 
