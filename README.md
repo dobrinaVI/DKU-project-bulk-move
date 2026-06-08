@@ -13,14 +13,7 @@ This repository is a **Dataiku project** that provides a **Standard Webapp** to 
 ## Where the code lives
 
 - Migration library: `lib/python/dku_project_bulk_move/migrator.py`
-- Webapp sources (editable): `webapp_src/project_bulk_move/`
-- Webapp definition tracked by Git-for-projects: `web_apps/pyCCIum.json`
-
-To regenerate the tracked `web_apps/pyCCIum.json` from `webapp_src/`:
-
-```bash
-python3 scripts/build_webapp_json.py
-```
+- Standard webapp (id `pyCCIum`): `web_apps/pyCCIum/`
 
 ## Usage (in DSS)
 

@@ -6,7 +6,7 @@ function backendUrl(path) {
 
 function lines(v) {
   return (v || "")
-    .split("\\n")
+    .split("\n")
     .map((s) => s.trim())
     .filter(Boolean);
 }
@@ -14,15 +14,29 @@ function lines(v) {
 function elt(tag, attrs, children) {
   const e = document.createElement(tag);
   if (attrs) Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
-  (children || []).forEach((c) => e.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+  (children || []).forEach((c) =>
+    e.appendChild(typeof c === "string" ? document.createTextNode(c) : c)
+  );
   return e;
 }
 
 function addMappingRow(src = "", tgt = "") {
   const row = elt("div", { class: "mappingRow" }, []);
-  const srcInput = elt("input", { class: "input", placeholder: "SRC_CONN", value: src }, []);
-  const tgtInput = elt("input", { class: "input", placeholder: "TGT_CONN", value: tgt }, []);
-  const delBtn = elt("button", { class: "iconBtn", type: "button", title: "Remove mapping" }, ["×"]);
+  const srcInput = elt(
+    "input",
+    { class: "input", placeholder: "SRC_CONN", value: src },
+    []
+  );
+  const tgtInput = elt(
+    "input",
+    { class: "input", placeholder: "TGT_CONN", value: tgt },
+    []
+  );
+  const delBtn = elt(
+    "button",
+    { class: "iconBtn", type: "button", title: "Remove mapping" },
+    ["×"]
+  );
   delBtn.onclick = () => row.remove();
   row.appendChild(srcInput);
   row.appendChild(tgtInput);
@@ -60,11 +74,15 @@ async function getJson(url) {
 
 function setStatus(line, obj) {
   document.getElementById("statusLine").textContent = line;
-  document.getElementById("statusJson").textContent = obj ? JSON.stringify(obj, null, 2) : "";
+  document.getElementById("statusJson").textContent = obj
+    ? JSON.stringify(obj, null, 2)
+    : "";
 }
 
 async function poll(jobId) {
-  const st = await getJson(backendUrl("/status?jobId=" + encodeURIComponent(jobId)));
+  const st = await getJson(
+    backendUrl("/status?jobId=" + encodeURIComponent(jobId))
+  );
   setStatus(`${st.status} (${jobId})`, st);
   if (st.status === "queued" || st.status === "running") {
     setTimeout(() => poll(jobId), 1500);
@@ -104,3 +122,4 @@ function wire() {
 }
 
 wire();
+

@@ -94,3 +94,4 @@ def start() -> str:
 def status() -> str:
     job_id = request.args.get("jobId", "")
     return json.dumps(_get_job(job_id))
+
