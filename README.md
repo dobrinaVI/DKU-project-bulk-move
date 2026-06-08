@@ -14,7 +14,15 @@ This repository is a **Dataiku project** that provides a **Standard Webapp** to 
 ## Where the code lives
 
 - Migration library: `lib/python/dku_project_bulk_move/migrator.py`
+- Instance inventory helper: `lib/python/dku_project_bulk_move/instance_audit.py`
 - Standard webapp (id `pyCCIum`): `web_apps/pyCCIum/`
+
+## Optional: instance inventory table
+
+If you want a quick table of what projects use **Snowflake datasets**, **OpenAI-family LLMs**, and which **Python code envs** are configured, run:
+
+- Script: `scripts/audit_instance_projects_to_dataset.py`
+- Output dataset (default): `INSTANCE_PROJECT_USAGE`
 
 ## Usage (in DSS)
 
