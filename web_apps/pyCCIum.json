@@ -13,7 +13,7 @@
     },
     "nbProcesses": 0,
     "backendAPIAccessEnabled": true,
-    "backendFramework": "FASTAPI",
+    "backendFramework": "FLASK",
     "libraries": [
       "jquery",
       "dataiku"
