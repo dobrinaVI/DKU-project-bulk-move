@@ -91,7 +91,6 @@
       {"name":"projectName","type":"string"},
       {"name":"pythonCodeEnv","type":"string"},
       {"name":"webappPythonCodeEnvs","type":"string"},
-      {"name":"agentToolCodeEnvs","type":"string"},
       {"name":"snowflakeConnections","type":"string"},
       {"name":"openaiConnections","type":"string"},
       {"name":"openaiLLMIds","type":"string"},
