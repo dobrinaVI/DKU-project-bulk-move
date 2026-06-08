@@ -67,6 +67,7 @@ def _run_job(job_id: str, payload: Dict[str, Any]) -> None:
 
         projects = payload.get("projects") or []
         connection_remap = payload.get("connectionRemap") or {}
+        codeenv_remap = payload.get("codeEnvRemap") or {}
         export_options = payload.get("options") or {}
 
         result = migrate_projects(
@@ -74,6 +75,7 @@ def _run_job(job_id: str, payload: Dict[str, Any]) -> None:
             target=target,
             project_keys=projects,
             connection_remap=connection_remap,
+            codeenv_remap=codeenv_remap,
             export_options=export_options,
             target_key_prefix=payload.get("targetKeyPrefix") or "",
         )

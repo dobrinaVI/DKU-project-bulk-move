@@ -98,6 +98,7 @@ def migrate_projects(
     target: InstanceCredentials,
     project_keys: Iterable[str],
     connection_remap: Mapping[str, str],
+    codeenv_remap: Optional[Mapping[str, str]] = None,
     export_options: Optional[Dict[str, Any]] = None,
     target_key_prefix: str = "",
 ) -> Dict[str, Any]:
@@ -138,6 +139,7 @@ def migrate_projects(
             import_settings = build_import_settings(
                 target_project_key=item["targetProjectKey"],
                 connection_remap=connection_remap,
+                codeenv_remap=codeenv_remap,
             )
             import_result = import_project_from_zip(
                 tgt_client, zip_path, import_settings=import_settings

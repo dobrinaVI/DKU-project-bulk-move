@@ -9,7 +9,7 @@
     <div class="wrap">
       <header class="header">
         <div class="title">Project Bulk Move</div>
-        <div class="subtitle">Export from source DSS → import into target DSS (with connection remapping)</div>
+        <div class="subtitle">Export from source DSS → import into target DSS (with connection + code env remapping)</div>
       </header>
 
       <div class="grid">
@@ -50,11 +50,30 @@
 
         <div class="row">
           <button id="addMapping" class="btn btnSecondary" type="button">Add mapping</button>
+        </div>
+
+        <div class="hint mt8">Suggested defaults: add a Snowflake mapping and an OpenAI (LLM Mesh) mapping.</div>
+      </section>
+
+      <section class="card">
+        <div class="cardTitle">Code env remapping</div>
+        <div class="hint">Map code env names referenced by the source project to code envs that already exist on the target instance (commonly needed for Agents/tools).</div>
+
+        <div class="mappingHeader">
+          <div>Source code env</div>
+          <div>Target code env</div>
+          <div></div>
+        </div>
+
+        <div id="codeenvMappings"></div>
+
+        <div class="row">
+          <button id="addCodeEnvMapping" class="btn btnSecondary" type="button">Add mapping</button>
           <div class="spacer"></div>
           <button id="start" class="btn" type="button">Start</button>
         </div>
 
-        <div class="hint mt8">Suggested defaults: add a Snowflake mapping and an OpenAI (LLM Mesh) mapping.</div>
+        <div class="hint mt8">Example: map <span class="mono">py312_duckduckgo_mcp</span> → an existing target Python env.</div>
       </section>
 
       <section class="card">
@@ -65,4 +84,3 @@
     </div>
   </body>
 </html>
-

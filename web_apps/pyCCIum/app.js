@@ -56,6 +56,44 @@ function readMappings() {
   return remap;
 }
 
+function addCodeEnvMappingRow(src = "", tgt = "") {
+  const row = elt("div", { class: "mappingRow" }, []);
+  const srcInput = elt(
+    "input",
+    { class: "input", placeholder: "SRC_CODE_ENV", value: src },
+    []
+  );
+  const tgtInput = elt(
+    "input",
+    { class: "input", placeholder: "TGT_CODE_ENV", value: tgt },
+    []
+  );
+  const delBtn = elt(
+    "button",
+    { class: "iconBtn", type: "button", title: "Remove mapping" },
+    ["×"]
+  );
+  delBtn.onclick = () => row.remove();
+  row.appendChild(srcInput);
+  row.appendChild(tgtInput);
+  row.appendChild(delBtn);
+  document.getElementById("codeenvMappings").appendChild(row);
+}
+
+function readCodeEnvMappings() {
+  const rows = Array.from(
+    document.querySelectorAll("#codeenvMappings .mappingRow")
+  );
+  const remap = {};
+  rows.forEach((r) => {
+    const inputs = r.querySelectorAll("input");
+    const src = (inputs[0].value || "").trim();
+    const tgt = (inputs[1].value || "").trim();
+    if (src && tgt) remap[src] = tgt;
+  });
+  return remap;
+}
+
 async function postJson(url, body) {
   const res = await fetch(url, {
     method: "POST",
@@ -91,10 +129,13 @@ async function poll(jobId) {
 
 function wire() {
   document.getElementById("addMapping").onclick = () => addMappingRow("", "");
+  document.getElementById("addCodeEnvMapping").onclick = () =>
+    addCodeEnvMappingRow("", "");
 
   // Defaults requested: Snowflake + OpenAI
   addMappingRow("SNOWFLAKE_SRC", "SNOWFLAKE_TGT");
   addMappingRow("OPENAI_SRC", "OPENAI_TGT");
+  addCodeEnvMappingRow("", "");
 
   document.getElementById("start").onclick = async () => {
     try {
@@ -104,6 +145,7 @@ function wire() {
         target: { host: (tgtHost.value || "").trim(), apiKey: tgtKey.value || "" },
         projects: lines(projects.value),
         connectionRemap: readMappings(),
+        codeEnvRemap: readCodeEnvMappings(),
         options: {
           exportUploads: false,
           exportManagedFS: false,
@@ -122,4 +164,3 @@ function wire() {
 }
 
 wire();
-
